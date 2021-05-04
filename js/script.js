@@ -1,5 +1,6 @@
 const selectionScreen = (function()
 {
+    // Loads contents of shape selection screen
     const loadScreen = function()
     {
         const body = document.querySelector(`body`);
@@ -41,6 +42,7 @@ const selectionScreen = (function()
         selection2.appendChild(x);
     }
 
+    // Unloads contents of shape selection screen
     const unloadScreen = function()
     {
         const center = document.querySelector(`center`);
@@ -59,6 +61,7 @@ const selectionScreen = (function()
 
 const playScreen = (function()
 {
+    // Loads playing area
     const loadScreen = function()
     {
         const body = document.querySelector(`body`);
@@ -101,6 +104,7 @@ const playScreen = (function()
         center.appendChild(br);
     }
 
+    // Loads reset button
     const resetButton = function()
     {
         const center = document.querySelector(`center`);
@@ -118,6 +122,7 @@ const playScreen = (function()
         });
     }
 
+    // Appends shape to grid based on player selection of grid
     const appendShapeToGrid = function(idValue, textInput, parentNode)
     {
         const inputShape = document.createElement(`label`);
@@ -129,6 +134,7 @@ const playScreen = (function()
         parentNode.appendChild(inputShape);
     }
 
+    // Displays game message below the playing area
     const updateGameMessage = function(message)
     {
         const gameDescription = document.querySelector(`#game-description`);
@@ -136,6 +142,7 @@ const playScreen = (function()
         gameDescription.textContent = message;
     }
 
+    // Disables entire playing area
     const disableGrid = function()
     {
         const grid = document.querySelectorAll(`.grid`);
@@ -151,6 +158,7 @@ const playScreen = (function()
 
 const gameBoard = (function()
 {
+    // Array to store shape based on player input
     let inputArray = [``, ``, ``, ``, ``, ``, ``, ``, ``,]
 
     const getArray = function()
@@ -163,6 +171,7 @@ const gameBoard = (function()
 
 const player = function()
 {
+    // Stores shape value (either `O` or `X`)
     let shape = ``;
 
     const getPlayerShape = function()
@@ -178,52 +187,69 @@ const player = function()
     return {getPlayerShape, assignPlayerShape}
 }
 
-// Main program
+// ============ //
+// Main program //
+// ============ //
+// Initializes variables that stores the player function for player 1 and player 2
 let player1 = player();
 let player2 = player();
-    
+
+// Loads contents of the shape selection screen
 selectionScreen.loadScreen();
 
 const userSelection = document.querySelectorAll(`.selection`);
 
 for (let i = 0; i < userSelection.length; i++)
 {
+    // Nested code runs when user selects a shape on screen
     userSelection[i].addEventListener(`click`, function(e)
     {
+        // Assigns player 1 to selected shape
         player1.assignPlayerShape(userSelection[i].textContent);
 
+        // Assigns value of `shape` variable
         let p1s = player1.getPlayerShape();
 
+        // Assigns `X` to `shape` variable of player2 if `O` is selected in the shape selection screen
         if (p1s === `O`)
         {
             player2.assignPlayerShape(`X`);
         }
+        // Assigns `O` to `shape` variable of player2 if `X` is selected in the shape selection screen
         else if (p1s === `X`)
         {
             player2.assignPlayerShape(`O`);
         }
 
+        // Assigns value of player2 `shape` variable to p2s
         let p2s = player2.getPlayerShape();
 
+        // Unloads contents of shape selection screen
         selectionScreen.unloadScreen();
+        // Loads contents of main playing screen
         playScreen.loadScreen();
 
         const gridSelection = document.querySelectorAll(`.grid`);
 
+        // Retrieves array that stores values based on user input on tic tac toe grids
         let array = gameBoard.getArray();
         let player1Count = 0;
         let player2Count = 0;
 
         for (let i = 0; i < gridSelection.length; i++)
         {   
+            // Nested code runs when user clicks on one of the nine tic tac toe grids
             gridSelection[i].addEventListener(`click`, function(e)
             {
                 if (player1Count === player2Count && gridSelection[i].textContent === ``)
                 {
+                    // Appends `shape` variable of player1 to array
                     array[i] = p1s;
 
+                    // Appends shape to tic tac toe grid
                     playScreen.appendShapeToGrid(`play-${p1s}`, p1s, gridSelection[i]);
                     
+                    // Updates game message below tic tac toe grid
                     playScreen.updateGameMessage(`Player 2's turn!`);
 
                     player1Count++;
@@ -249,7 +275,9 @@ for (let i = 0; i < userSelection.length; i++)
                     (array[2] === p1s && array[4] === p1s && array[6] === p1s))
                 {
                     playScreen.updateGameMessage(`Player 1 wins!`);
+                    // Loads reset button below game display message
                     playScreen.resetButton();
+                    // Disables tic tac toe grid from user input
                     playScreen.disableGrid();
                 }
                 else if ((array[0] === p2s && array[1] === p2s && array[2] === p2s) ||
