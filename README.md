@@ -1,6 +1,6 @@
 # PROJECT STATUS: Completed
 
-### Objective: To demonstrate understanding of factory functions and modules.
+### Objective: To demonstrate understanding of factory functions and module patterns.
 
 Created using HTML, CSS, and Javascript.
 
